@@ -42,7 +42,7 @@ abstract class Configuration {
         'locale'         => 'en-GB',
         'method'         => 'authcode',
         'priorityLevel'  => 4,
-        'identification' => [ 'authCode' => '' ],
+        'identification' => ['authCode' => ''],
     ];
 
     // HTML Classes

@@ -8,7 +8,6 @@ namespace JKetelaar\fut\bot\market\items\players\attributes;
 use JKetelaar\fut\bot\ImprovedEnum;
 
 class Attribute extends ImprovedEnum {
-
     const PACE      = 0;
     const SHOOTING  = 1;
     const PASSING   = 2;
@@ -24,8 +23,7 @@ class Attribute extends ImprovedEnum {
      * @return Attribute|null
      */
     public static function findByValue($value, $returnObject = false, $default = null) {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return parent::findByValue($value, $returnObject, $default);
     }
-
 }

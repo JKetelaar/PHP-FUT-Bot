@@ -8,7 +8,6 @@ namespace JKetelaar\fut\bot\market\items;
 use JKetelaar\fut\bot\market\items\misc\Formation;
 
 abstract class AbstractItemType {
-
     /**
      * @var int
      */

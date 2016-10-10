@@ -6,7 +6,6 @@
 namespace JKetelaar\fut\bot\config;
 
 abstract class Comparisons {
-
     const MAIN_LOGIN_TITLE            = 'Log In';
     const LOGIN_FORM_TITLE            = 'Login Verification';
     const NO_AUTHENTICATOR_FORM_TITLE = 'Set Up an App Authenticator';

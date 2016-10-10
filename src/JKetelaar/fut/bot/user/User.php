@@ -9,7 +9,6 @@ use JKetelaar\fut\bot\errors\NonExistingTokenFunction;
 use JKetelaar\fut\bot\errors\NulledTokenFunction;
 
 class User {
-
     /**
      * @var string
      */

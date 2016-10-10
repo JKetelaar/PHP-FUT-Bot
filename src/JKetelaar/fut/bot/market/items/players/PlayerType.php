@@ -13,12 +13,11 @@ use JKetelaar\fut\bot\market\items\players\attributes\Position;
 use JKetelaar\fut\bot\ResultParser;
 
 /**
- * Class PlayerType
+ * Class PlayerType.
  * @package JKetelaar\fut\bot\market\items\players
  * @AllArgsConstructor
  */
 class PlayerType extends AbstractItemType implements ResultParser {
-
     /**
      * @var int
      */
@@ -135,24 +134,24 @@ class PlayerType extends AbstractItemType implements ResultParser {
      * @return object
      */
     public static function toObject($result) {
-        $player = new PlayerType(
-            $result[ 'teamid' ],
-            $result[ 'leagueId' ],
-            $result[ 'rating' ],
-            $result[ 'marketDataMinPrice' ],
-            $result[ 'marketDataMaxPrice' ],
-            Formation::findByKey($result[ 'formation' ], true),
-            $result[ 'morale' ],
-            ChemistryStyle::findByValue($result[ 'playStyle' ], true),
-            $result[ 'fitness' ],
-            InjuryType::findByValue($result[ 'injuryType' ], true),
-            $result[ 'injuryGames' ],
-            Position::findByValue($result[ 'preferredPosition' ], true),
-            $result[ 'training' ],
-            $result[ 'contract' ],
-            $result[ 'suspension' ],
-            AttributeValue::toObjects($result[ AttributeValue::TAG ]),
-            Nation::findByValue($result[ 'nation' ], true)
+        $player = new self(
+            $result['teamid'],
+            $result['leagueId'],
+            $result['rating'],
+            $result['marketDataMinPrice'],
+            $result['marketDataMaxPrice'],
+            Formation::findByKey($result['formation'], true),
+            $result['morale'],
+            ChemistryStyle::findByValue($result['playStyle'], true),
+            $result['fitness'],
+            InjuryType::findByValue($result['injuryType'], true),
+            $result['injuryGames'],
+            Position::findByValue($result['preferredPosition'], true),
+            $result['training'],
+            $result['contract'],
+            $result['suspension'],
+            AttributeValue::toObjects($result[AttributeValue::TAG]),
+            Nation::findByValue($result['nation'], true)
         );
 
         return $player;

@@ -8,7 +8,6 @@ namespace JKetelaar\fut\bot\market\trading;
 use JKetelaar\fut\bot\ResultParser;
 
 class Trade implements ResultParser {
-
     const TAG = 'auctionInfo';
 
     /**
@@ -110,19 +109,19 @@ class Trade implements ResultParser {
      * @return Trade
      */
     public static function toObject($result) {
-        $trade    = new Trade(
-            $result[ 'tradeId' ],
-            $result[ 'tradeState' ],
-            $result[ 'buyNowPrice' ],
-            $result[ 'currentBid' ],
-            $result[ 'offers' ],
-            $result[ 'watched' ],
-            $result[ 'bidState' ],
-            $result[ 'startingBid' ],
-            $result[ 'confidenceValue' ],
-            $result[ 'expires' ]
+        $trade    = new self(
+            $result['tradeId'],
+            $result['tradeState'],
+            $result['buyNowPrice'],
+            $result['currentBid'],
+            $result['offers'],
+            $result['watched'],
+            $result['bidState'],
+            $result['startingBid'],
+            $result['confidenceValue'],
+            $result['expires']
         );
-        $itemData = ItemData::toObject($result[ 'itemData' ]);
+        $itemData = ItemData::toObject($result['itemData']);
         $trade->setItemData($itemData);
 
         return $trade;
@@ -171,7 +170,7 @@ class Trade implements ResultParser {
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isWatched() {
         return $this->watched;

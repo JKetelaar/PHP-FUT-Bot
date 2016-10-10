@@ -16,7 +16,6 @@ use JKetelaar\fut\bot\errors\NulledTokenFunction;
 use JKetelaar\fut\bot\web\Parser;
 
 class Login {
-
     /**
      * @var Curl
      */
@@ -86,7 +85,7 @@ class Login {
     public function login() {
         $result = false;
         if(($resultMain = $this->requestMain()) != null) {
-            if( ! is_bool($resultMain)) {
+            if(!is_bool($resultMain)) {
                 $codeURL = $this->postLoginForm($resultMain);
 
                 $result = $this->postTwoFactorForm($codeURL);
@@ -95,7 +94,7 @@ class Login {
             }
         }
 
-        if( ! is_bool($result)) {
+        if(!is_bool($result)) {
             throw new MainLogin(298175, 'Unknown result given by flow');
         }
 
@@ -134,7 +133,7 @@ class Login {
         }
 
         preg_match('/EASW_ID\W*=\W*\'(\d*)\'/', $this->curl->response, $matches);
-        if(sizeof($matches > 1) && ($id = $matches[ 1 ]) != null) {
+        if(count($matches > 1) && ($id = $matches[1]) != null) {
             $this->nucleusId = $id;
 
             return $this->getShards($id);
@@ -149,7 +148,7 @@ class Login {
         }
 
         $tempCurl = &$this->curl;
-        $tempCurl->setOpt(CURLOPT_HTTPHEADER, [ 'Content-Type:application/json' ]);
+        $tempCurl->setOpt(CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         $tempCurl->setHeaders(
             [
                 'Easw-Session-Data-Nucleus-Id' => $id,
@@ -168,8 +167,8 @@ class Login {
 
         if(($response = $tempCurl->response) != null) {
             if(($shards = json_decode(json_encode($tempCurl->response), true)) != null) {
-                foreach($shards[ 'shardInfo' ] as $shard) {
-                    foreach($shard[ 'platforms' ] as $platform) {
+                foreach($shards['shardInfo'] as $shard) {
+                    foreach($shard['platforms'] as $platform) {
                         if($platform === API::getPlatform($this->user->getPlatform())) {
                             $this->shardInfos = $shard;
                         }
@@ -188,8 +187,8 @@ class Login {
     /**
      * @param null $shards
      *
-     * @return bool
      * @throws MainLogin
+     * @return bool
      */
     private function getAccountInformation($shards = null) {
         if($shards == null) {
@@ -197,7 +196,7 @@ class Login {
         }
 
         $tempCurl = &$this->curl;
-        $tempCurl->setHeader('X-UT-Route', 'https://' . $shards[ 'clientFacingIpPort' ]);
+        $tempCurl->setHeader('X-UT-Route', 'https://' . $shards['clientFacingIpPort']);
         $tempCurl->get(URL::LOGIN_ACCOUNTS);
 
         if($tempCurl->error) {
@@ -205,14 +204,14 @@ class Login {
         }
 
         $accounts = json_decode(json_encode($tempCurl->response), true);
-        if(sizeof($accounts) > 0 && sizeof($accounts[ 'userAccountInfo' ]) > 0 && sizeof(
-                                                                                      $accounts[ 'userAccountInfo' ][ 'personas' ]
+        if(count($accounts) > 0 && count($accounts['userAccountInfo']) > 0 && count(
+                                                                                      $accounts['userAccountInfo']['personas']
                                                                                   ) > 0
         ) {
             $p = null;
-            foreach($accounts[ 'userAccountInfo' ][ 'personas' ] as $persona) {
-                foreach($persona[ 'userClubList' ] as $club) {
-                    if($club[ 'year' ] == Configuration::FUT_YEAR && $club[ 'platform' ] == API::getPlatform(
+            foreach($accounts['userAccountInfo']['personas'] as $persona) {
+                foreach($persona['userClubList'] as $club) {
+                    if($club['year'] == Configuration::FUT_YEAR && $club['platform'] == API::getPlatform(
                             $this->user->getPlatform()
                         )
                     ) {
@@ -234,8 +233,8 @@ class Login {
 
     private function getSession() {
         $data = [
-            'nucleusPersonaId'          => $this->persona[ 'personaId' ],
-            'nucleusPersonaDisplayName' => $this->persona[ 'personaName' ],
+            'nucleusPersonaId'          => $this->persona['personaId'],
+            'nucleusPersonaDisplayName' => $this->persona['personaName'],
             'gameSku'                   => API::getGameSku($this->user->getPlatform()),
             'nucleusPersonaPlatform'    => API::getPlatform($this->user->getPlatform()),
         ];
@@ -258,7 +257,7 @@ class Login {
 
     private function phishing() {
         $curl = &$this->curl;
-        $curl->setHeader('X-UT-SID', $this->session[ 'sid' ]);
+        $curl->setHeader('X-UT-SID', $this->session['sid']);
 
         $curl->get(URL::LOGIN_QUESTION);
 
@@ -269,15 +268,15 @@ class Login {
         // Check for other responses
         $question = json_decode(json_encode($curl->response), true);
 
-        if(isset($question[ 'code' ])) {
-            if($question[ 'code' ] === Comparisons::CAPTCHA_BODY_CODE) {
+        if(isset($question['code'])) {
+            if($question['code'] === Comparisons::CAPTCHA_BODY_CODE) {
                 throw new CaptchaException();
             }
         }
 
-        if(isset($question[ 'string' ])) {
-            if($question[ 'string' ] === Comparisons::ALREADY_LOGGED_IN) {
-                $this->setForFutureRequests($question[ 'token' ]);
+        if(isset($question['string'])) {
+            if($question['string'] === Comparisons::ALREADY_LOGGED_IN) {
+                $this->setForFutureRequests($question['token']);
 
                 return true;
             }
@@ -290,7 +289,7 @@ class Login {
         $headers = [
             'X-UT-PHISHING-TOKEN'           => $token,
             'X-HTTP-Method-Override'        => 'GET',
-            Configuration::X_UT_ROUTE_PARAM => 'https://' . explode(':', $this->session[ 'ipPort' ])[ 0 ],
+            Configuration::X_UT_ROUTE_PARAM => 'https://' . explode(':', $this->session['ipPort'])[0],
             'x-flash-version'               => '20,0,0,272',
         ];
         $this->user->setHeaders($headers);
@@ -298,11 +297,11 @@ class Login {
 
     public function validate() {
         exec(NODE_LOCATION . ' "' . __DIR__ . '/../js/index.js" ' . $this->user->getSecret(), $output);
-        if(isset($output[ 0 ]) && strlen($output[ 0 ]) == 32) {
+        if(isset($output[0]) && strlen($output[0]) == 32) {
             $this->curl->setHeader('Content-Type', 'application/x-www-form-urlencoded');
-            $this->curl->setHeader('X-UT-SID', $this->session[ 'sid' ]);
+            $this->curl->setHeader('X-UT-SID', $this->session['sid']);
 
-            $this->curl->post(URL::LOGIN_VALIDATE, [ 'answer' => $output[ 0 ] ]);
+            $this->curl->post(URL::LOGIN_VALIDATE, ['answer' => $output[0]]);
         }
 
         if($this->curl->error) {
@@ -310,9 +309,9 @@ class Login {
         }
 
         $debug = json_decode($this->curl->response, true);
-        if(isset($debug[ 'debug' ])) {
-            if($debug[ 'debug' ] === Comparisons::CORRECT_ANSWER) {
-                $this->setForFutureRequests($debug[ 'token' ]);
+        if(isset($debug['debug'])) {
+            if($debug['debug'] === Comparisons::CORRECT_ANSWER) {
+                $this->setForFutureRequests($debug['token']);
 
                 return true;
             }

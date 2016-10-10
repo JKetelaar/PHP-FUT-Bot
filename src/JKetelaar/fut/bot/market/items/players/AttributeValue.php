@@ -9,7 +9,6 @@ use JKetelaar\fut\bot\market\items\players\attributes\Attribute;
 use JKetelaar\fut\bot\ResultParser;
 
 class AttributeValue implements ResultParser {
-
     const TAG = 'attributeList';
 
     /**
@@ -53,10 +52,10 @@ class AttributeValue implements ResultParser {
      * @return AttributeValue
      */
     public static function toObject($result) {
-        $index = $result[ 'index' ];
-        $value = $result[ 'value' ];
+        $index = $result['index'];
+        $value = $result['value'];
 
-        return new AttributeValue(
+        return new self(
             Attribute::findByValue($index, true), $value
         );
     }

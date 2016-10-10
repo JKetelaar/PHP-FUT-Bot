@@ -8,18 +8,17 @@ namespace JKetelaar\fut\bot;
 use MyCLabs\Enum\Enum;
 
 /**
- * Class ImprovedEnum
+ * Class ImprovedEnum.
  * @package JKetelaar\fut\bot
  * @method static ImprovedEnum _DEFAULT()
  */
 class ImprovedEnum extends Enum {
-
     /**
      * @param string $key
      *
-     * @param bool   $returnObject
+     * @param bool $returnObject
      *
-     * @param null   $default
+     * @param null $default
      *
      * @return null|ImprovedEnum|object
      */
