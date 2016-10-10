@@ -12,7 +12,6 @@ use JKetelaar\fut\bot\market\items\players\PlayerType;
 use JKetelaar\fut\bot\ResultParser;
 
 class ItemData implements ResultParser {
-
     const TAG = 'itemData';
 
     /**
@@ -133,21 +132,21 @@ class ItemData implements ResultParser {
      * @return ItemData
      */
     public static function toObject($result) {
-        var_dump($result[ 'itemState' ]);
-        $itemData = new ItemData(
-            $result[ 'id' ],
-            $result[ 'timestamp' ],
-            $result[ 'untradeable' ],
-            $result[ 'assetId' ],
-            ItemType::findByKey($result[ 'itemType' ], true),
+        var_dump($result['itemState']);
+        $itemData = new self(
+            $result['id'],
+            $result['timestamp'],
+            $result['untradeable'],
+            $result['assetId'],
+            ItemType::findByKey($result['itemType'], true),
             null,
-            $result[ 'resourceId' ],
-            $result[ 'owners' ],
-            $result[ 'discardValue' ],
-            ItemState::findByKey($result[ 'itemState' ], true),
-            $result[ 'cardsubtypeid' ],
-            $result[ 'lastSalePrice' ],
-            $result[ 'rareflag' ]
+            $result['resourceId'],
+            $result['owners'],
+            $result['discardValue'],
+            ItemState::findByKey($result['itemState'], true),
+            $result['cardsubtypeid'],
+            $result['lastSalePrice'],
+            $result['rareflag']
         );
 
         $item = null;
@@ -183,7 +182,7 @@ class ItemData implements ResultParser {
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isUntradeable() {
         return $this->untradeable;

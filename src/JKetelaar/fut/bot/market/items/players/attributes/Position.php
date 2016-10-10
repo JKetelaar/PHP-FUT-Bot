@@ -8,7 +8,6 @@ namespace JKetelaar\fut\bot\market\items\players\attributes;
 use JKetelaar\fut\bot\ImprovedEnum;
 
 class Position extends ImprovedEnum {
-
     const DEFENDERS   = 'defense';
     const MIDFIELDERS = 'midfield';
     const ATTACKERS   = 'attacker';

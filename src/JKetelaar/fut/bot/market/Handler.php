@@ -19,7 +19,6 @@ use JKetelaar\fut\bot\market\trading\Trade;
 use JKetelaar\fut\bot\user\User;
 
 class Handler {
-
     /**
      * @var Curl
      */
@@ -42,7 +41,7 @@ class Handler {
     }
 
     /**
-     * TODO: Still in development, throws errors
+     * TODO: Still in development, throws errors.
      *
      * @deprecated
      *
@@ -51,7 +50,7 @@ class Handler {
      * @return ItemData
      */
     public function getDefinition($assetId) {
-        return ItemData::toObject($this->sendRequest(sprintf(URL::API_DEF, $assetId))[ ItemData::TAG ][ 0 ]);
+        return ItemData::toObject($this->sendRequest(sprintf(URL::API_DEF, $assetId))[ItemData::TAG][0]);
     }
 
     /**
@@ -60,14 +59,14 @@ class Handler {
      * @param array  $data
      * @param null   $headers
      *
-     * @param bool   $anonymous
+     * @param bool $anonymous
      *
-     * @return array|bool|null|string
      * @throws IncorrectEndpoint
      * @throws IncorrectHeaders
      * @throws MarketError
      * @throws UnknownEndpoint
      * @throws UnparsableEndpoint
+     * @return array|bool|null|string
      */
     public function sendRequest($url, Method $method = null, $data = [], $headers = null, $anonymous = false) {
         if($method === null) {
@@ -94,7 +93,7 @@ class Handler {
         if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
             throw new IncorrectEndpoint($url);
         } else {
-            $url = $this->user->getHeaders()[ Configuration::X_UT_ROUTE_PARAM ] . $url;
+            $url = $this->user->getHeaders()[Configuration::X_UT_ROUTE_PARAM] . $url;
             if(filter_var($url, FILTER_VALIDATE_URL) === false) {
                 throw new UnparsableEndpoint($url);
             }
@@ -129,7 +128,7 @@ class Handler {
      */
     public function getTradepile() {
         $auctions = [];
-        foreach(($request = $this->sendRequest(URL::API_TRADEPILE)[ Trade::TAG ]) as $auction) {
+        foreach(($request = $this->sendRequest(URL::API_TRADEPILE)[Trade::TAG]) as $auction) {
             $auctions[] = Trade::toObject($auction);
         }
 
@@ -142,8 +141,8 @@ class Handler {
 
     public function getCredits() {
         $result = $this->sendRequest(URL::API_CREDITS);
-        if(isset($result[ 'credits' ])) {
-            return $result[ 'credits' ];
+        if(isset($result['credits'])) {
+            return $result['credits'];
         }
 
         return null;
@@ -151,12 +150,12 @@ class Handler {
 
     public function getCurrencies() {
         $result = $this->sendRequest(URL::API_CREDITS);
-        if(isset($result[ Currency::TAG ])) {
+        if(isset($result[Currency::TAG])) {
             $currencies = [];
 
-            foreach($result[ Currency::TAG ] as $currency) {
+            foreach($result[Currency::TAG] as $currency) {
                 $currencies[] = new Currency(
-                    $currency[ 'name' ], $currency[ 'funds' ], $currency[ 'finalFunds' ]
+                    $currency['name'], $currency['funds'], $currency['finalFunds']
                 );
             }
 
