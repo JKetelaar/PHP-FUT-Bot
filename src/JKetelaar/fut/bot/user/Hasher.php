@@ -21,7 +21,7 @@ class Hasher {
         $c = -1732584194;
         $d = 271733878;
 
-        for($i = 0; $i < sizeof($x); $i += 16) {
+        for($i = 0; $i < count($x); $i += 16) {
             $tempA = $a;
             $tempB = $b;
             $tempC = $c;
@@ -154,10 +154,10 @@ class Hasher {
     }
 
     private static function _32bitleftshift($number, $steps) {
-        $binary = decbin($number) . str_repeat("0", $steps);
-        $binary = str_pad($binary, 32, "0", STR_PAD_LEFT);
+        $binary = decbin($number) . str_repeat('0', $steps);
+        $binary = str_pad($binary, 32, '0', STR_PAD_LEFT);
         $binary = substr($binary, strlen($binary) - 32);
-        if($binary{0} == "1") {
+        if($binary[0] == '1') {
             return -(pow(2, 31) - bindec(substr($binary, 1)));
         } else {
             return bindec($binary);
