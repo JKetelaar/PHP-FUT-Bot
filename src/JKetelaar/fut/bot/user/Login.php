@@ -86,7 +86,7 @@ class Login {
     public function login() {
         $result = false;
         if(($resultMain = $this->requestMain()) != null) {
-            if( ! is_bool($resultMain)) {
+            if( !is_bool($resultMain)) {
                 $codeURL = $this->postLoginForm($resultMain);
 
                 $result = $this->postTwoFactorForm($codeURL);
@@ -95,7 +95,7 @@ class Login {
             }
         }
 
-        if( ! is_bool($result)) {
+        if( !is_bool($result)) {
             throw new MainLogin(298175, 'Unknown result given by flow');
         }
 
@@ -134,7 +134,7 @@ class Login {
         }
 
         preg_match('/EASW_ID\W*=\W*\'(\d*)\'/', $this->curl->response, $matches);
-        if(sizeof($matches > 1) && ($id = $matches[ 1 ]) != null) {
+        if(count($matches > 1) && ($id = $matches[ 1 ]) != null) {
             $this->nucleusId = $id;
 
             return $this->getShards($id);
@@ -188,8 +188,8 @@ class Login {
     /**
      * @param null $shards
      *
-     * @return bool
      * @throws MainLogin
+     * @return bool
      */
     private function getAccountInformation($shards = null) {
         if($shards == null) {
@@ -205,7 +205,7 @@ class Login {
         }
 
         $accounts = json_decode(json_encode($tempCurl->response), true);
-        if(sizeof($accounts) > 0 && sizeof($accounts[ 'userAccountInfo' ]) > 0 && sizeof(
+        if(count($accounts) > 0 && count($accounts[ 'userAccountInfo' ]) > 0 && count(
                                                                                       $accounts[ 'userAccountInfo' ][ 'personas' ]
                                                                                   ) > 0
         ) {
