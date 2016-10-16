@@ -5,7 +5,6 @@
 
 namespace JKetelaar\fut\bot\market\searching\filters;
 
-use JKetelaar\fut\bot\market\items\ItemType;
 use JKetelaar\fut\bot\market\items\players\attributes\Attribute;
 use JKetelaar\fut\bot\market\items\players\PlayerType;
 use JKetelaar\fut\bot\market\trading\Trade;
@@ -49,7 +48,7 @@ class AttributeFilter implements Filter {
         $newTrades = [];
         foreach($trades as $trade) {
             /**
-             * @var PlayerType $item
+             * @var PlayerType
              */
             $item = $trade->getItemData()->getItem();
             foreach($item->getAttributes() as $attribute) {
