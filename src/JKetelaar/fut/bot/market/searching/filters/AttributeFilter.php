@@ -47,7 +47,7 @@ class AttributeFilter implements Filter {
     public function filter(array $trades) {
         $newTrades = [];
         foreach($trades as $trade) {
-            /**
+            /*
              * @var PlayerType
              */
             $item = $trade->getItemData()->getItem();
