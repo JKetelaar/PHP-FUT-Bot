@@ -9,8 +9,8 @@ use JKetelaar\fut\api\market\items\players\attributes\Attribute;
 use JKetelaar\fut\api\market\items\players\PlayerType;
 use JKetelaar\fut\api\market\trading\Trade;
 
-class AttributeFilter implements Filter {
-
+class AttributeFilter implements Filter
+{
     /**
      * @var Attribute
      */
@@ -27,15 +27,17 @@ class AttributeFilter implements Filter {
      * @param Attribute $attribute
      * @param int       $limit
      */
-    public function __construct(Attribute $attribute, $limit) {
+    public function __construct(Attribute $attribute, $limit)
+    {
         $this->attribute = $attribute;
-        $this->limit     = $limit;
+        $this->limit = $limit;
     }
 
     /**
      * @return int
      */
-    public function getLimit() {
+    public function getLimit()
+    {
         return $this->limit;
     }
 
@@ -44,16 +46,17 @@ class AttributeFilter implements Filter {
      *
      * @return Trade[]
      */
-    public function filter(array $trades) {
+    public function filter(array $trades)
+    {
         $newTrades = [];
-        foreach($trades as $trade) {
+        foreach ($trades as $trade) {
             /**
-             * @var PlayerType $item
+             * @var PlayerType
              */
             $item = $trade->getItemData()->getItem();
-            foreach($item->getAttributes() as $attribute) {
-                if($attribute->getAttribute()->getKey() === $this->getAttribute()->getKey()) {
-                    if($attribute->getValue() > $this->limit) {
+            foreach ($item->getAttributes() as $attribute) {
+                if ($attribute->getAttribute()->getKey() === $this->getAttribute()->getKey()) {
+                    if ($attribute->getValue() > $this->limit) {
                         $newTrades[] = $trade;
                     }
                 }
@@ -66,7 +69,8 @@ class AttributeFilter implements Filter {
     /**
      * @return Attribute
      */
-    public function getAttribute() {
+    public function getAttribute()
+    {
         return $this->attribute;
     }
 }

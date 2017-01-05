@@ -11,8 +11,8 @@ use JKetelaar\fut\api\market\items\ItemType;
 use JKetelaar\fut\api\market\searching\filters\AttributeFilter;
 use JKetelaar\fut\api\market\trading\Trade;
 
-class Searcher {
-
+class Searcher
+{
     const LIMIT = 50;
 
     /**
@@ -25,7 +25,8 @@ class Searcher {
      *
      * @param Handler $handler
      */
-    public function __construct(Handler $handler) {
+    public function __construct(Handler $handler)
+    {
         $this->handler = $handler;
     }
 
@@ -37,16 +38,18 @@ class Searcher {
      * @param array             $params
      *
      * @throws AmountTooBigException
+     *
      * @return array|bool|null|string
      */
-    public function searchFor(ItemType $type, array $filters = [], $offset = 0, $amount = 16, array $params = []) {
-        if($amount > self::LIMIT) {
+    public function searchFor(ItemType $type, array $filters = [], $offset = 0, $amount = 16, array $params = [])
+    {
+        if ($amount > self::LIMIT) {
             throw new AmountTooBigException($amount, self::LIMIT);
         }
         $parameters = [];
 
-        foreach($params as $parameter => $value) {
-            $parameters[ $parameter ] = $value;
+        foreach ($params as $parameter => $value) {
+            $parameters[$parameter] = $value;
         }
 
         $parameters = array_merge(
@@ -59,15 +62,15 @@ class Searcher {
         );
 
         $trades = [];
-        foreach(
+        foreach (
             $this->handler->sendRequest(
-                URL::API_TRANSFER_MARKET . http_build_query($parameters)
-            )[ Trade::TAG ] as $item
+                URL::API_TRANSFER_MARKET.http_build_query($parameters)
+            )[Trade::TAG] as $item
         ) {
             $trades[] = Trade::toObject($item);
         }
 
-        foreach($filters as $filter){
+        foreach ($filters as $filter) {
             $trades = $filter->filter($trades);
         }
 

@@ -7,8 +7,8 @@ namespace JKetelaar\fut\api\market;
 
 use JKetelaar\fut\api\ResultParser;
 
-class Currency implements ResultParser {
-
+class Currency implements ResultParser
+{
     const TAG = 'currencies';
 
     /**
@@ -33,30 +33,34 @@ class Currency implements ResultParser {
      * @param string $funds
      * @param string $finalFunds
      */
-    public function __construct($name, $funds, $finalFunds) {
-        $this->name       = $name;
-        $this->funds      = $funds;
+    public function __construct($name, $funds, $finalFunds)
+    {
+        $this->name = $name;
+        $this->funds = $funds;
         $this->finalFunds = $finalFunds;
     }
 
     /**
      * @return string
      */
-    public function getFunds() {
+    public function getFunds()
+    {
         return $this->funds;
     }
 
     /**
      * @return string
      */
-    public function getFinalFunds() {
+    public function getFinalFunds()
+    {
         return $this->finalFunds;
     }
 
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -65,9 +69,10 @@ class Currency implements ResultParser {
      *
      * @return object
      */
-    public static function toObject($result) {
+    public static function toObject($result)
+    {
         return new self(
-            $result[ 'name' ], $result[ 'funds' ], $result[ 'finalFunds' ]
+            $result['name'], $result['funds'], $result['finalFunds']
         );
     }
 }

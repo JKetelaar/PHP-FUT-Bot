@@ -8,13 +8,15 @@ namespace JKetelaar\fut\api\web;
 use simplehtmldom_1_5\simple_html_dom;
 use Sunra\PhpSimple\HtmlDomParser;
 
-class Parser {
+class Parser
+{
     /**
      * @param $string
      *
      * @return bool|\simplehtmldom_1_5\simple_html_dom
      */
-    public static function getHTML($string) {
+    public static function getHTML($string)
+    {
         $html = HtmlDomParser::str_get_html($string, true, false);
 
         return $html;
@@ -25,15 +27,14 @@ class Parser {
      *
      * @return null|string
      */
-    public static function getDocumentTitle(simple_html_dom $dom) {
+    public static function getDocumentTitle(simple_html_dom $dom)
+    {
         $head = $dom->find('head');
-        if(count($head) > 0) {
-            $title = $head[ 0 ]->find('title', 0);
-            if($title != null && ($text = $title->innertext) != null) {
+        if (count($head) > 0) {
+            $title = $head[0]->find('title', 0);
+            if ($title != null && ($text = $title->innertext) != null) {
                 return $text;
             }
         }
-
-        return null;
     }
 }

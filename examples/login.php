@@ -2,9 +2,8 @@
 /**
  * @author JKetelaar
  */
+require_once 'bootstrap.php';
 
-require_once('bootstrap.php');
-
-if($api->login() === true) {
-    echo('We\'re logged in!');
+if ($api->login() === true) {
+    echo 'We\'re logged in!';
 }

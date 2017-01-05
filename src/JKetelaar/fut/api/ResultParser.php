@@ -5,7 +5,8 @@
 
 namespace JKetelaar\fut\api;
 
-interface ResultParser {
+interface ResultParser
+{
     /**
      * @param array $result
      *

@@ -18,8 +18,8 @@ use JKetelaar\fut\api\market\trading\ItemData;
 use JKetelaar\fut\api\market\trading\Trade;
 use JKetelaar\fut\api\user\User;
 
-class Handler {
-
+class Handler
+{
     /**
      * @var Curl
      */
@@ -41,13 +41,14 @@ class Handler {
      * @param Curl $curl
      * @param User $user
      */
-    public function __construct(Curl $curl, User $user) {
+    public function __construct(Curl $curl, User $user)
+    {
         $this->curl = $curl;
         $this->user = $user;
     }
 
     /**
-     * TODO: Still in development, throws errors
+     * TODO: Still in development, throws errors.
      *
      * @deprecated
      *
@@ -55,8 +56,9 @@ class Handler {
      *
      * @return ItemData
      */
-    public function getDefinition($assetId) {
-        return ItemData::toObject($this->sendRequest(sprintf(URL::API_DEF, $assetId))[ ItemData::TAG ][ 0 ]);
+    public function getDefinition($assetId)
+    {
+        return ItemData::toObject($this->sendRequest(sprintf(URL::API_DEF, $assetId))[ItemData::TAG][0]);
     }
 
     /**
@@ -64,7 +66,6 @@ class Handler {
      * @param Method $method
      * @param array  $data
      * @param null   $headers
-     *
      * @param bool   $anonymous
      *
      * @throws IncorrectEndpoint
@@ -72,14 +73,16 @@ class Handler {
      * @throws MarketError
      * @throws UnknownEndpoint
      * @throws UnparsableEndpoint
+     *
      * @return array|bool|null|string
      */
-    public function sendRequest($url, Method $method = null, $data = [], $headers = null, $anonymous = false) {
-        if($method === null) {
+    public function sendRequest($url, Method $method = null, $data = [], $headers = null, $anonymous = false)
+    {
+        if ($method === null) {
             $method = Method::GET();
         }
 
-        if($anonymous === true) {
+        if ($anonymous === true) {
             $curl = new Curl();
             $curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
             $curl->setOpt(CURLOPT_ENCODING, Configuration::HEADER_ACCEPT_ENCODING);
@@ -92,25 +95,25 @@ class Handler {
             $curl = &$this->curl;
         }
 
-        foreach($this->user->getHeaders() as $key => $header) {
+        foreach ($this->user->getHeaders() as $key => $header) {
             $curl->setHeader($key, $header);
         }
 
-        if(filter_var($url, FILTER_VALIDATE_URL) !== false) {
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
             throw new IncorrectEndpoint($url);
         } else {
-            $url = $this->user->getHeaders()[ Configuration::X_UT_ROUTE_PARAM ] . $url;
-            if(filter_var($url, FILTER_VALIDATE_URL) === false) {
+            $url = $this->user->getHeaders()[Configuration::X_UT_ROUTE_PARAM].$url;
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
                 throw new UnparsableEndpoint($url);
             }
         }
 
-        if($headers != null && is_array($headers)) {
-            if(array_keys($headers) !== range(0, count($headers) - 1)) {
+        if ($headers != null && is_array($headers)) {
+            if (array_keys($headers) !== range(0, count($headers) - 1)) {
                 throw new IncorrectHeaders();
             }
 
-            foreach($headers as $key => $header) {
+            foreach ($headers as $key => $header) {
                 $curl->setHeader($key, $header);
             }
         }
@@ -118,11 +121,11 @@ class Handler {
         $curl->setHeader('X-HTTP-Method-Override', $method);
         $curl->post($url, $data);
 
-        if($curl->error) {
+        if ($curl->error) {
             throw new MarketError(null, $curl->errorCode, $curl->errorMessage);
         }
 
-        if($curl->httpStatusCode == 404) {
+        if ($curl->httpStatusCode == 404) {
             throw new UnknownEndpoint($url);
         }
 
@@ -132,53 +135,54 @@ class Handler {
     /**
      * @return Trade[]
      */
-    public function getTradepile() {
+    public function getTradepile()
+    {
         $auctions = [];
-        foreach(($request = $this->sendRequest(URL::API_TRADEPILE)[ Trade::TAG ]) as $auction) {
+        foreach (($request = $this->sendRequest(URL::API_TRADEPILE)[Trade::TAG]) as $auction) {
             $auctions[] = Trade::toObject($auction);
         }
 
         return $auctions;
     }
 
-    public function getWatchlist() {
+    public function getWatchlist()
+    {
         $watchers = [];
-        foreach($this->sendRequest(URL::API_WATCHLIST)[ Trade::TAG ] as $item) {
+        foreach ($this->sendRequest(URL::API_WATCHLIST)[Trade::TAG] as $item) {
             $watchers[] = Trade::toObject($item);
         }
 
         return $watchers;
     }
 
-    public function getCredits() {
+    public function getCredits()
+    {
         $result = $this->sendRequest(URL::API_CREDITS);
-        if(isset($result[ 'credits' ])) {
-            return $result[ 'credits' ];
+        if (isset($result['credits'])) {
+            return $result['credits'];
         }
-
-        return null;
     }
 
-    public function getCurrencies() {
+    public function getCurrencies()
+    {
         $result = $this->sendRequest(URL::API_CREDITS);
-        if(isset($result[ Currency::TAG ])) {
+        if (isset($result[Currency::TAG])) {
             $currencies = [];
 
-            foreach($result[ Currency::TAG ] as $currency) {
+            foreach ($result[Currency::TAG] as $currency) {
                 $currencies[] = Currency::toObject($currency);
             }
 
             return $currencies;
         }
-
-        return null;
     }
 
     /**
      * @return Searcher
      */
-    public function getSearcher() {
-        if ($this->searcher == null){
+    public function getSearcher()
+    {
+        if ($this->searcher == null) {
             $this->searcher = new Searcher($this);
         }
 

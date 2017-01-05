@@ -8,28 +8,28 @@ namespace JKetelaar\fut\api;
 use MyCLabs\Enum\Enum;
 
 /**
- * Class ImprovedEnum
- * @package JKetelaar\fut\api
+ * Class ImprovedEnum.
+ *
  * @method static ImprovedEnum _DEFAULT()
  */
-class ImprovedEnum extends Enum {
+class ImprovedEnum extends Enum
+{
     /**
      * @param string $key
-     *
      * @param bool   $returnObject
-     *
      * @param null   $default
      *
      * @return null|ImprovedEnum|object
      */
-    public static function findByKey($key, $returnObject = false, $default = null) {
-        foreach(self::values() as $item) {
-            if(strtolower($item->getKey()) === strtolower($key)) {
+    public static function findByKey($key, $returnObject = false, $default = null)
+    {
+        foreach (self::values() as $item) {
+            if (strtolower($item->getKey()) === strtolower($key)) {
                 return $returnObject ? $item : $item->getValue();
             }
         }
 
-        if($default == null) {
+        if ($default == null) {
             $default = self::_DEFAULT();
         }
 
@@ -43,14 +43,15 @@ class ImprovedEnum extends Enum {
      *
      * @return null|ImprovedEnum|object
      */
-    public static function findByValue($value, $returnObject = false, $default = null) {
-        foreach(self::values() as $item) {
-            if(strtolower($item->getValue()) === strtolower($value)) {
+    public static function findByValue($value, $returnObject = false, $default = null)
+    {
+        foreach (self::values() as $item) {
+            if (strtolower($item->getValue()) === strtolower($value)) {
                 return $returnObject ? $item : $item->getKey();
             }
         }
 
-        if($default == null) {
+        if ($default == null) {
             $default = self::_DEFAULT();
         }
 
@@ -60,7 +61,8 @@ class ImprovedEnum extends Enum {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return ucwords(str_replace('_', ' ', strtolower($this->getKey())));
     }
 }

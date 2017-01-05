@@ -5,7 +5,8 @@
 
 namespace JKetelaar\fut\api\errors\market;
 
-class MarketError extends \Exception {
+class MarketError extends \Exception
+{
     /**
      * MarketError constructor.
      *
@@ -13,17 +14,18 @@ class MarketError extends \Exception {
      * @param string|null $code
      * @param string|null $response
      */
-    public function __construct($message = null, $code = null, $response = null) {
-        if($message == null) {
+    public function __construct($message = null, $code = null, $response = null)
+    {
+        if ($message == null) {
             $message = 'Unknown error occurred in the Market. If this error is unknown to you too, please report this error.';
         }
 
-        if($code != null) {
-            $message .= "\nError with code: " . $code;
+        if ($code != null) {
+            $message .= "\nError with code: ".$code;
         }
 
-        if($response != null) {
-            $message .= "\nWith response message:" . $response;
+        if ($response != null) {
+            $message .= "\nWith response message:".$response;
         }
 
         parent::__construct($message);

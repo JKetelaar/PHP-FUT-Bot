@@ -7,8 +7,8 @@ namespace JKetelaar\fut\api\market\items;
 
 use JKetelaar\fut\api\market\items\misc\Formation;
 
-abstract class AbstractItemType {
-
+abstract class AbstractItemType
+{
     /**
      * @var int
      */
@@ -57,53 +57,59 @@ abstract class AbstractItemType {
         $marketDataMaxPrice,
         Formation $formation
     ) {
-        $this->teamid             = $teamid;
-        $this->leagueId           = $leagueId;
-        $this->rating             = $rating;
+        $this->teamid = $teamid;
+        $this->leagueId = $leagueId;
+        $this->rating = $rating;
         $this->marketDataMinPrice = $marketDataMinPrice;
         $this->marketDataMaxPrice = $marketDataMaxPrice;
-        $this->formation          = $formation;
+        $this->formation = $formation;
     }
 
     /**
      * @return int
      */
-    public function getTeamid() {
+    public function getTeamid()
+    {
         return $this->teamid;
     }
 
     /**
      * @return int
      */
-    public function getLeagueId() {
+    public function getLeagueId()
+    {
         return $this->leagueId;
     }
 
     /**
      * @return int
      */
-    public function getRating() {
+    public function getRating()
+    {
         return $this->rating;
     }
 
     /**
      * @return int
      */
-    public function getMarketDataMinPrice() {
+    public function getMarketDataMinPrice()
+    {
         return $this->marketDataMinPrice;
     }
 
     /**
      * @return int
      */
-    public function getMarketDataMaxPrice() {
+    public function getMarketDataMaxPrice()
+    {
         return $this->marketDataMaxPrice;
     }
 
     /**
      * @return Formation
      */
-    public function getFormation() {
+    public function getFormation()
+    {
         return $this->formation;
     }
 }

@@ -5,11 +5,12 @@
 
 namespace Market;
 
-
 use JKetelaar\fut\api\API;
 
-class ApiTest extends \PHPUnit_Framework_TestCase {
-    public function testPlatformCorrectness() {
+class ApiTest extends \PHPUnit_Framework_TestCase
+{
+    public function testPlatformCorrectness()
+    {
         $this->assertTrue(API::getPlatform('ps4') === 'ps3');
         $this->assertTrue(API::getPlatform('ps3') === 'ps3');
         $this->assertTrue(API::getPlatform('x360') === '360');
@@ -19,7 +20,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase {
         $this->assertNull(API::getPlatform('non existing'));
     }
 
-    public function testGameSKUCorrectness() {
+    public function testGameSKUCorrectness()
+    {
         $this->assertTrue(API::getGameSku('ps4') === 'FFA17PS4');
         $this->assertTrue(API::getGameSku('ps3') === 'FFA17PS3');
         $this->assertTrue(API::getGameSku('pc') === 'FFA17PCC');

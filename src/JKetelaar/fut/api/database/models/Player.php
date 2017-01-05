@@ -9,7 +9,8 @@ use JKetelaar\fut\api\config\URL;
 use JKetelaar\fut\api\market\items\players\attributes\Nation;
 use JKetelaar\fut\api\ResultParser;
 
-class Player implements ResultParser {
+class Player implements ResultParser
+{
     /**
      * @var int
      */
@@ -44,12 +45,13 @@ class Player implements ResultParser {
      * @param Nation $nation
      * @param int    $rating
      */
-    public function __construct($assetId, $firstName, $lastName, Nation $nation, $rating) {
-        $this->assetId   = $assetId;
+    public function __construct($assetId, $firstName, $lastName, Nation $nation, $rating)
+    {
+        $this->assetId = $assetId;
         $this->firstName = $firstName;
-        $this->lastName  = $lastName;
-        $this->nation    = $nation;
-        $this->rating    = $rating;
+        $this->lastName = $lastName;
+        $this->nation = $nation;
+        $this->rating = $rating;
     }
 
     /**
@@ -57,22 +59,25 @@ class Player implements ResultParser {
      *
      * @return Player
      */
-    public static function toObject($result) {
+    public static function toObject($result)
+    {
         return new self(
-            $result[ 'id' ], $result[ 'f' ], $result[ 'l' ], Nation::findByValue($result[ 'n' ], true), $result[ 'r' ]
+            $result['id'], $result['f'], $result['l'], Nation::findByValue($result['n'], true), $result['r']
         );
     }
 
     /**
      * @return int
      */
-    public function getAssetId() {
+    public function getAssetId()
+    {
         return $this->assetId;
     }
 
-    public function getBaseId() {
+    public function getBaseId()
+    {
         $id = $this->assetId;
-        while($id > 16777216) {
+        while ($id > 16777216) {
             $id -= 16777216;
         }
 
@@ -82,42 +87,48 @@ class Player implements ResultParser {
     /**
      * @return string
      */
-    public function getFirstName() {
+    public function getFirstName()
+    {
         return $this->firstName;
     }
 
     /**
      * @return string
      */
-    public function getLastName() {
+    public function getLastName()
+    {
         return $this->lastName;
     }
 
     /**
      * @return Nation
      */
-    public function getNation() {
+    public function getNation()
+    {
         return $this->nation;
     }
 
     /**
      * @return int
      */
-    public function getRating() {
+    public function getRating()
+    {
         return $this->rating;
     }
 
     /**
      * @return string
      */
-    public function getFullName() {
-        return $this->firstName . ' ' . $this->lastName;
+    public function getFullName()
+    {
+        return $this->firstName.' '.$this->lastName;
     }
 
     /**
      * @return string URL of the player image
      */
-    public function getImage() {
+    public function getImage()
+    {
         return sprintf(URL::PLAYER_IMAGE, $this->assetId);
     }
 }

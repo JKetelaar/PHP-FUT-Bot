@@ -13,12 +13,12 @@ use JKetelaar\fut\api\market\items\players\attributes\Position;
 use JKetelaar\fut\api\ResultParser;
 
 /**
- * Class PlayerType
- * @package JKetelaar\fut\api\market\items\players
+ * Class PlayerType.
+ *
  * @AllArgsConstructor
  */
-class PlayerType extends AbstractItemType implements ResultParser {
-
+class PlayerType extends AbstractItemType implements ResultParser
+{
     /**
      * @var int
      */
@@ -116,17 +116,17 @@ class PlayerType extends AbstractItemType implements ResultParser {
     ) {
         parent::__construct($teamid, $leagueId, $rating, $marketDataMinPrice, $marketDataMaxPrice, $formation);
 
-        $this->morale            = $morale;
-        $this->playStyle         = $playStyle;
-        $this->fitness           = $fitness;
-        $this->injuryType        = $injuryType;
-        $this->injuryGames       = $injuryGames;
+        $this->morale = $morale;
+        $this->playStyle = $playStyle;
+        $this->fitness = $fitness;
+        $this->injuryType = $injuryType;
+        $this->injuryGames = $injuryGames;
         $this->preferredPosition = $preferredPosition;
-        $this->training          = $training;
-        $this->contract          = $contract;
-        $this->suspension        = $suspension;
-        $this->attributes        = $attributes;
-        $this->nation            = $nation;
+        $this->training = $training;
+        $this->contract = $contract;
+        $this->suspension = $suspension;
+        $this->attributes = $attributes;
+        $this->nation = $nation;
     }
 
     /**
@@ -134,25 +134,26 @@ class PlayerType extends AbstractItemType implements ResultParser {
      *
      * @return object
      */
-    public static function toObject($result) {
+    public static function toObject($result)
+    {
         $player = new self(
-            $result[ 'teamid' ],
-            $result[ 'leagueId' ],
-            $result[ 'rating' ],
-            isset($result[ 'marketDataMinPrice' ]) ? $result[ 'marketDataMinPrice' ] : 0,
-            isset($result[ 'marketDataMaxPrice' ]) ? $result[ 'marketDataMaxPrice' ] : 0,
-            Formation::findByKey($result[ 'formation' ], true),
-            $result[ 'morale' ],
-            ChemistryStyle::findByValue($result[ 'playStyle' ], true),
-            $result[ 'fitness' ],
-            InjuryType::findByValue($result[ 'injuryType' ], true),
-            $result[ 'injuryGames' ],
-            Position::findByValue($result[ 'preferredPosition' ], true),
-            $result[ 'training' ],
-            $result[ 'contract' ],
-            $result[ 'suspension' ],
-            AttributeValue::toObjects($result[ AttributeValue::TAG ]),
-            Nation::findByValue($result[ 'nation' ], true)
+            $result['teamid'],
+            $result['leagueId'],
+            $result['rating'],
+            isset($result['marketDataMinPrice']) ? $result['marketDataMinPrice'] : 0,
+            isset($result['marketDataMaxPrice']) ? $result['marketDataMaxPrice'] : 0,
+            Formation::findByKey($result['formation'], true),
+            $result['morale'],
+            ChemistryStyle::findByValue($result['playStyle'], true),
+            $result['fitness'],
+            InjuryType::findByValue($result['injuryType'], true),
+            $result['injuryGames'],
+            Position::findByValue($result['preferredPosition'], true),
+            $result['training'],
+            $result['contract'],
+            $result['suspension'],
+            AttributeValue::toObjects($result[AttributeValue::TAG]),
+            Nation::findByValue($result['nation'], true)
         );
 
         return $player;
@@ -161,77 +162,88 @@ class PlayerType extends AbstractItemType implements ResultParser {
     /**
      * @return int
      */
-    public function getMorale() {
+    public function getMorale()
+    {
         return $this->morale;
     }
 
     /**
      * @return ChemistryStyle
      */
-    public function getPlayStyle() {
+    public function getPlayStyle()
+    {
         return $this->playStyle;
     }
 
     /**
      * @return mixed
      */
-    public function getFitness() {
+    public function getFitness()
+    {
         return $this->fitness;
     }
 
     /**
      * @return InjuryType
      */
-    public function getInjuryType() {
+    public function getInjuryType()
+    {
         return $this->injuryType;
     }
 
     /**
      * @return int
      */
-    public function getInjuryGames() {
+    public function getInjuryGames()
+    {
         return $this->injuryGames;
     }
 
     /**
      * @return Position
      */
-    public function getPreferredPosition() {
+    public function getPreferredPosition()
+    {
         return $this->preferredPosition;
     }
 
     /**
      * @return int
      */
-    public function getTraining() {
+    public function getTraining()
+    {
         return $this->training;
     }
 
     /**
      * @return int
      */
-    public function getContract() {
+    public function getContract()
+    {
         return $this->contract;
     }
 
     /**
      * @return int
      */
-    public function getSuspension() {
+    public function getSuspension()
+    {
         return $this->suspension;
     }
 
     /**
      * @return AttributeValue[]
      */
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return $this->attributes;
     }
 
     /**
      * @return Nation
      */
-    public function getNation() {
+    public function getNation()
+    {
         return $this->nation;
     }
 }

@@ -8,8 +8,8 @@ namespace JKetelaar\fut\api\user;
 use JKetelaar\fut\api\errors\NonExistingTokenFunction;
 use JKetelaar\fut\api\errors\NulledTokenFunction;
 
-class User {
-
+class User
+{
     /**
      * @var string
      */
@@ -54,57 +54,65 @@ class User {
      * @param string $tokenFunction
      * @param        $platform
      */
-    public function __construct($username, $password, $secret, $tokenFunction, $platform) {
-        $this->username      = $username;
-        $this->password      = $password;
-        $this->secret        = $secret;
+    public function __construct($username, $password, $secret, $tokenFunction, $platform)
+    {
+        $this->username = $username;
+        $this->password = $password;
+        $this->secret = $secret;
         $this->tokenFunction = $tokenFunction;
-        $this->platform      = $platform;
+        $this->platform = $platform;
     }
 
     /**
      * @return string
      */
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
     /**
      * @return string
      */
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
     /**
      * @return string
      */
-    public function getSecret() {
+    public function getSecret()
+    {
         return $this->secret;
     }
 
     /**
      * @return string
      */
-    public function getTokenFunction() {
+    public function getTokenFunction()
+    {
         return $this->tokenFunction;
     }
 
     /**
      * @return string
      */
-    public function getPlatform() {
+    public function getPlatform()
+    {
         return $this->platform;
     }
 
-    public function getCachedToken() {
+    public function getCachedToken()
+    {
         return $this->token;
     }
 
-    public function getToken() {
-        if(function_exists($this->tokenFunction)) {
+    public function getToken()
+    {
+        if (function_exists($this->tokenFunction)) {
             $func = $this->tokenFunction;
-            if(($token = $func()) != null) {
+            if (($token = $func()) != null) {
                 $this->token = $token;
 
                 return $this->token;
@@ -119,14 +127,16 @@ class User {
     /**
      * @return mixed
      */
-    public function getHeaders() {
+    public function getHeaders()
+    {
         return $this->headers;
     }
 
     /**
      * @param mixed $headers
      */
-    public function setHeaders($headers) {
+    public function setHeaders($headers)
+    {
         $this->headers = $headers;
     }
 }
