@@ -5,10 +5,12 @@
 
 namespace JKetelaar\fut\api\errors\market;
 
-class UnknownEndpoint extends \Exception {
-    public function __construct($endpoint) {
+class UnknownEndpoint extends \Exception
+{
+    public function __construct($endpoint)
+    {
         parent::__construct(
-            'Endpoint given is unknown: ' . $endpoint
+            'Endpoint given is unknown: '.$endpoint
         );
     }
 }

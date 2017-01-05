@@ -13,7 +13,8 @@ use JKetelaar\fut\api\market\Handler;
 use JKetelaar\fut\api\user\Login;
 use JKetelaar\fut\api\user\User;
 
-class API {
+class API
+{
     /**
      * @var User
      */
@@ -51,20 +52,22 @@ class API {
      * @throws NonExistingTokenFunction
      * @throws UnknownPlatform
      */
-    public function __construct($username, $password, $secret, $token_function, $platform) {
-        if(self::getPlatform($platform) == null) {
+    public function __construct($username, $password, $secret, $token_function, $platform)
+    {
+        if (self::getPlatform($platform) == null) {
             throw new UnknownPlatform();
         }
 
-        if(function_exists($token_function)) {
+        if (function_exists($token_function)) {
             $this->user = new User($username, $password, $secret, $token_function, $platform);
         } else {
             throw new NonExistingTokenFunction();
         }
     }
 
-    public static final function getPlatform($platform) {
-        switch($platform) {
+    final public static function getPlatform($platform)
+    {
+        switch ($platform) {
             case 'pc':
                 return 'pc';
             case 'ps3':
@@ -74,12 +77,11 @@ class API {
             case 'xone':
                 return '360';
         }
-
-        return null;
     }
 
-    public static final function getGameSku($platform) {
-        switch($platform) {
+    final public static function getGameSku($platform)
+    {
+        switch ($platform) {
             case 'pc':
                 return 'FFA17PCC';
             case 'ps3':
@@ -91,27 +93,27 @@ class API {
             case 'xone':
                 return 'FFA17XBO';
         }
-
-        return null;
     }
 
     /**
      * @return Handler
      */
-    public function getHandler() {
-        if(($handler = $this->handler) == null) {
+    public function getHandler()
+    {
+        if (($handler = $this->handler) == null) {
             $this->handler = new Handler($this->curl, $this->user);
         }
 
         return $this->handler;
     }
 
-    public function login($path = DATA_DIR . '/cookies.txt') {
-        if($this->login == null) {
+    public function login($path = DATA_DIR.'/cookies.txt')
+    {
+        if ($this->login == null) {
             $this->login = new Login($this->user, $path);
         }
 
-        if(($result = $this->login->login()) === true) {
+        if (($result = $this->login->login()) === true) {
             $this->curl = $this->login->getCurl();
         }
 
@@ -121,8 +123,9 @@ class API {
     /**
      * @return Players
      */
-    public function getPlayersAPI() {
-        if ($this->playersAPI == null){
+    public function getPlayersAPI()
+    {
+        if ($this->playersAPI == null) {
             $this->playersAPI = new Players();
         }
 

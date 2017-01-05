@@ -7,7 +7,8 @@ namespace JKetelaar\fut\api\market\searching\filters;
 
 use JKetelaar\fut\api\market\trading\Trade;
 
-interface Filter {
+interface Filter
+{
     /**
      * @param Trade[] $trades
      *

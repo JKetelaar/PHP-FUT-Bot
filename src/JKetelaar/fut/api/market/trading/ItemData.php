@@ -11,8 +11,8 @@ use JKetelaar\fut\api\market\items\misc\ItemState;
 use JKetelaar\fut\api\market\items\players\PlayerType;
 use JKetelaar\fut\api\ResultParser;
 
-class ItemData implements ResultParser {
-
+class ItemData implements ResultParser
+{
     const TAG = 'itemData';
 
     /**
@@ -112,19 +112,19 @@ class ItemData implements ResultParser {
         $lastSalePrice,
         $rareflag
     ) {
-        $this->id            = $id;
-        $this->timestamp     = $timestamp;
-        $this->untradeable   = $untradeable;
-        $this->assetId       = $assetId;
-        $this->itemType      = $itemType;
-        $this->item          = $item;
-        $this->resourceId    = $resourceId;
-        $this->owners        = $owners;
-        $this->discardValue  = $discardValue;
-        $this->itemState     = $itemState;
+        $this->id = $id;
+        $this->timestamp = $timestamp;
+        $this->untradeable = $untradeable;
+        $this->assetId = $assetId;
+        $this->itemType = $itemType;
+        $this->item = $item;
+        $this->resourceId = $resourceId;
+        $this->owners = $owners;
+        $this->discardValue = $discardValue;
+        $this->itemState = $itemState;
         $this->cardsubtypeid = $cardsubtypeid;
         $this->lastSalePrice = $lastSalePrice;
-        $this->rareflag      = $rareflag;
+        $this->rareflag = $rareflag;
     }
 
     /**
@@ -132,25 +132,26 @@ class ItemData implements ResultParser {
      *
      * @return ItemData
      */
-    public static function toObject($result) {
+    public static function toObject($result)
+    {
         $itemData = new self(
-            $result[ 'id' ],
-            $result[ 'timestamp' ],
-            $result[ 'untradeable' ],
-            $result[ 'assetId' ],
-            ItemType::findByKey($result[ 'itemType' ], true),
+            $result['id'],
+            $result['timestamp'],
+            $result['untradeable'],
+            $result['assetId'],
+            ItemType::findByKey($result['itemType'], true),
             null,
-            $result[ 'resourceId' ],
-            $result[ 'owners' ],
-            $result[ 'discardValue' ],
-            ItemState::findByKey($result[ 'itemState' ], true),
-            $result[ 'cardsubtypeid' ],
-            $result[ 'lastSalePrice' ],
-            $result[ 'rareflag' ]
+            $result['resourceId'],
+            $result['owners'],
+            $result['discardValue'],
+            ItemState::findByKey($result['itemState'], true),
+            $result['cardsubtypeid'],
+            $result['lastSalePrice'],
+            $result['rareflag']
         );
 
         $item = null;
-        switch($itemData->getItemType()->getValue()) {
+        switch ($itemData->getItemType()->getValue()) {
             case ItemType::PLAYER:
                 $item = PlayerType::toObject($result);
                 break;
@@ -163,91 +164,104 @@ class ItemData implements ResultParser {
     /**
      * @return ItemType
      */
-    public function getItemType() {
+    public function getItemType()
+    {
         return $this->itemType;
     }
 
     /**
      * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @return int
      */
-    public function getTimestamp() {
+    public function getTimestamp()
+    {
         return $this->timestamp;
     }
 
     /**
      * @return bool
      */
-    public function isUntradeable() {
+    public function isUntradeable()
+    {
         return $this->untradeable;
     }
 
     /**
      * @return int
      */
-    public function getAssetId() {
+    public function getAssetId()
+    {
         return $this->assetId;
     }
 
     /**
      * @return int
      */
-    public function getResourceId() {
+    public function getResourceId()
+    {
         return $this->resourceId;
     }
 
     /**
      * @return int
      */
-    public function getOwners() {
+    public function getOwners()
+    {
         return $this->owners;
     }
 
     /**
      * @return int
      */
-    public function getDiscardValue() {
+    public function getDiscardValue()
+    {
         return $this->discardValue;
     }
 
     /**
      * @return ItemState
      */
-    public function getItemState() {
+    public function getItemState()
+    {
         return $this->itemState;
     }
 
     /**
      * @return int
      */
-    public function getCardsubtypeid() {
+    public function getCardsubtypeid()
+    {
         return $this->cardsubtypeid;
     }
 
     /**
      * @return int
      */
-    public function getLastSalePrice() {
+    public function getLastSalePrice()
+    {
         return $this->lastSalePrice;
     }
 
     /**
      * @return int
      */
-    public function getRareflag() {
+    public function getRareflag()
+    {
         return $this->rareflag;
     }
 
     /**
      * @return AbstractItemType
      */
-    public function getItem() {
+    public function getItem()
+    {
         return $this->item;
     }
 }

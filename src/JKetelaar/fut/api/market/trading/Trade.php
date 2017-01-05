@@ -7,8 +7,8 @@ namespace JKetelaar\fut\api\market\trading;
 
 use JKetelaar\fut\api\ResultParser;
 
-class Trade implements ResultParser {
-
+class Trade implements ResultParser
+{
     const TAG = 'auctionInfo';
 
     /**
@@ -92,16 +92,16 @@ class Trade implements ResultParser {
         $confidenceValue,
         $expires
     ) {
-        $this->id              = $id;
-        $this->tradeState      = $tradeState;
-        $this->buyNowPrice     = $buyNowPrice;
-        $this->currentBid      = $currentBid;
-        $this->offers          = $offers;
-        $this->watched         = $watched;
-        $this->bidStatus       = $bidStatus;
-        $this->startingBid     = $startingBid;
+        $this->id = $id;
+        $this->tradeState = $tradeState;
+        $this->buyNowPrice = $buyNowPrice;
+        $this->currentBid = $currentBid;
+        $this->offers = $offers;
+        $this->watched = $watched;
+        $this->bidStatus = $bidStatus;
+        $this->startingBid = $startingBid;
         $this->confidenceValue = $confidenceValue;
-        $this->expires         = $expires;
+        $this->expires = $expires;
     }
 
     /**
@@ -109,20 +109,21 @@ class Trade implements ResultParser {
      *
      * @return Trade
      */
-    public static function toObject($result) {
-        $trade    = new self(
-            $result[ 'tradeId' ],
-            $result[ 'tradeState' ],
-            $result[ 'buyNowPrice' ],
-            $result[ 'currentBid' ],
-            $result[ 'offers' ],
-            $result[ 'watched' ],
-            $result[ 'bidState' ],
-            $result[ 'startingBid' ],
-            $result[ 'confidenceValue' ],
-            $result[ 'expires' ]
+    public static function toObject($result)
+    {
+        $trade = new self(
+            $result['tradeId'],
+            $result['tradeState'],
+            $result['buyNowPrice'],
+            $result['currentBid'],
+            $result['offers'],
+            $result['watched'],
+            $result['bidState'],
+            $result['startingBid'],
+            $result['confidenceValue'],
+            $result['expires']
         );
-        $itemData = ItemData::toObject($result[ 'itemData' ]);
+        $itemData = ItemData::toObject($result['itemData']);
         $trade->setItemData($itemData);
 
         return $trade;
@@ -131,84 +132,96 @@ class Trade implements ResultParser {
     /**
      * @param ItemData $itemData
      */
-    private function setItemData($itemData) {
+    private function setItemData($itemData)
+    {
         $this->itemData = $itemData;
     }
 
     /**
      * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @return string
      */
-    public function getTradeState() {
+    public function getTradeState()
+    {
         return $this->tradeState;
     }
 
     /**
      * @return int
      */
-    public function getBuyNowPrice() {
+    public function getBuyNowPrice()
+    {
         return $this->buyNowPrice;
     }
 
     /**
      * @return int
      */
-    public function getCurrentBid() {
+    public function getCurrentBid()
+    {
         return $this->currentBid;
     }
 
     /**
      * @return int
      */
-    public function getOffers() {
+    public function getOffers()
+    {
         return $this->offers;
     }
 
     /**
      * @return bool
      */
-    public function isWatched() {
+    public function isWatched()
+    {
         return $this->watched;
     }
 
     /**
      * @return string
      */
-    public function getBidStatus() {
+    public function getBidStatus()
+    {
         return $this->bidStatus;
     }
 
     /**
      * @return int
      */
-    public function getStartingBid() {
+    public function getStartingBid()
+    {
         return $this->startingBid;
     }
 
     /**
      * @return int
      */
-    public function getConfidenceValue() {
+    public function getConfidenceValue()
+    {
         return $this->confidenceValue;
     }
 
     /**
      * @return int
      */
-    public function getExpires() {
+    public function getExpires()
+    {
         return $this->expires;
     }
 
     /**
      * @return ItemData
      */
-    public function getItemData() {
+    public function getItemData()
+    {
         return $this->itemData;
     }
 }

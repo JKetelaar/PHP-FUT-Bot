@@ -8,8 +8,8 @@ namespace JKetelaar\fut\api\market\items\players;
 use JKetelaar\fut\api\market\items\players\attributes\Attribute;
 use JKetelaar\fut\api\ResultParser;
 
-class AttributeValue implements ResultParser {
-
+class AttributeValue implements ResultParser
+{
     const TAG = 'attributeList';
 
     /**
@@ -28,9 +28,10 @@ class AttributeValue implements ResultParser {
      * @param Attribute $attribute
      * @param int       $value
      */
-    public function __construct(Attribute $attribute, $value) {
+    public function __construct(Attribute $attribute, $value)
+    {
         $this->attribute = $attribute;
-        $this->value     = $value;
+        $this->value = $value;
     }
 
     /**
@@ -38,9 +39,10 @@ class AttributeValue implements ResultParser {
      *
      * @return AttributeValue[]
      */
-    public static function toObjects($result) {
+    public static function toObjects($result)
+    {
         $attributes = [];
-        foreach($result as $item) {
+        foreach ($result as $item) {
             $attributes[] = self::toObject($item);
         }
 
@@ -52,9 +54,10 @@ class AttributeValue implements ResultParser {
      *
      * @return AttributeValue
      */
-    public static function toObject($result) {
-        $index = $result[ 'index' ];
-        $value = $result[ 'value' ];
+    public static function toObject($result)
+    {
+        $index = $result['index'];
+        $value = $result['value'];
 
         return new self(
             Attribute::findByValue($index, true), $value
@@ -64,14 +67,16 @@ class AttributeValue implements ResultParser {
     /**
      * @return Attribute
      */
-    public function getAttribute() {
+    public function getAttribute()
+    {
         return $this->attribute;
     }
 
     /**
      * @return int
      */
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
 }

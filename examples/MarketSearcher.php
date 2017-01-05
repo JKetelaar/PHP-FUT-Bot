@@ -2,7 +2,6 @@
 /**
  * @author JKetelaar
  */
-
 $searcher = $api->getHandler()->getSearcher();
 
 // Search for players on the market, no limits etc
@@ -37,11 +36,11 @@ $players = $searcher->searchFor(
 
 // Search for a specific player (Mario Götze) with the Player API
 $playersAPI = $api->getPlayersAPI();
-$player     = $playersAPI->getPlayer(7763);
-$players    = $searcher->searchFor(
+$player = $playersAPI->getPlayer(7763);
+$players = $searcher->searchFor(
     \JKetelaar\fut\api\market\items\ItemType::PLAYER,
     [],
     0,
     16,
-    [ \JKetelaar\fut\api\market\searching\Parameter::MASKED_DEFINITION_ID => $player->getBaseId() ]
+    [\JKetelaar\fut\api\market\searching\Parameter::MASKED_DEFINITION_ID => $player->getBaseId()]
 );

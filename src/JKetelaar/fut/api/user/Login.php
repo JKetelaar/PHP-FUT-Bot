@@ -16,8 +16,8 @@ use JKetelaar\fut\api\errors\login\MainLogin;
 use JKetelaar\fut\api\errors\NulledTokenFunction;
 use JKetelaar\fut\api\web\Parser;
 
-class Login {
-
+class Login
+{
     /**
      * @var Curl
      */
@@ -59,13 +59,15 @@ class Login {
      * @param User   $user
      * @param string $path
      */
-    public function __construct(User $user, $path) {
+    public function __construct(User $user, $path)
+    {
         $this->user = $user;
         $this->path = $path;
         $this->curl = $this->setupCurl();
     }
 
-    private function setupCurl() {
+    private function setupCurl()
+    {
         // Some pages are more than 2MB, so we have to reserve some extra space
         define('MAX_FILE_SIZE', 5 * 1000 * 1000);
 
@@ -84,10 +86,11 @@ class Login {
         return $curl;
     }
 
-    public function login() {
+    public function login()
+    {
         $result = false;
-        if(($resultMain = $this->requestMain()) != null) {
-            if( !is_bool($resultMain)) {
+        if (($resultMain = $this->requestMain()) != null) {
+            if (!is_bool($resultMain)) {
                 $codeURL = $this->postLoginForm($resultMain);
 
                 $result = $this->postTwoFactorForm($codeURL);
@@ -96,46 +99,49 @@ class Login {
             }
         }
 
-        if( !is_bool($result)) {
+        if (!is_bool($result)) {
             throw new MainLogin(298175, 'Unknown result given by flow');
         }
 
         return $result;
     }
 
-    private function requestMain() {
+    private function requestMain()
+    {
         $this->curl->get(URL::LOGIN_MAIN);
-        if($this->curl->error) {
+        if ($this->curl->error) {
             throw new MainLogin($this->curl->errorCode, $this->curl->errorMessage);
         }
 
         $document = Parser::getHTML($this->curl->response);
-        $title    = Parser::getDocumentTitle($document);
+        $title = Parser::getDocumentTitle($document);
 
-        if($this->isLoggedInPage($title)) {
+        if ($this->isLoggedInPage($title)) {
             return $this->getFUTPage();
         }
 
-        if(Parser::getDocumentTitle($document) === Comparisons::MAIN_LOGIN_TITLE) {
+        if (Parser::getDocumentTitle($document) === Comparisons::MAIN_LOGIN_TITLE) {
             return $this->curl->getInfo(CURLINFO_EFFECTIVE_URL);
         } else {
-            throw new MainLogin(261582, 'Page not matching main login (' . $title . ')');
+            throw new MainLogin(261582, 'Page not matching main login ('.$title.')');
         }
     }
 
-    private function isLoggedInPage($title) {
+    private function isLoggedInPage($title)
+    {
         return $title === Comparisons::LOGGED_IN_TITLE;
     }
 
-    private function getFUTPage() {
+    private function getFUTPage()
+    {
         $this->curl->get(URL::LOGIN_NUCLEUS);
 
-        if($this->curl->error) {
+        if ($this->curl->error) {
             throw new MainLogin($this->curl->errorCode, $this->curl->errorMessage);
         }
 
         preg_match('/EASW_ID\W*=\W*\'(\d*)\'/', $this->curl->response, $matches);
-        if(count($matches > 1) && ($id = $matches[ 1 ]) != null) {
+        if (count($matches > 1) && ($id = $matches[1]) != null) {
             $this->nucleusId = $id;
 
             return $this->getShards($id);
@@ -144,13 +150,14 @@ class Login {
         }
     }
 
-    private function getShards($id = null) {
-        if($id == null) {
+    private function getShards($id = null)
+    {
+        if ($id == null) {
             $id = $this->nucleusId;
         }
 
         $tempCurl = &$this->curl;
-        $tempCurl->setOpt(CURLOPT_HTTPHEADER, [ 'Content-Type:application/json' ]);
+        $tempCurl->setOpt(CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         $tempCurl->setHeaders(
             [
                 'Easw-Session-Data-Nucleus-Id' => $id,
@@ -163,15 +170,15 @@ class Login {
 
         $tempCurl->get(URL::LOGIN_SHARDS);
 
-        if($tempCurl->error) {
+        if ($tempCurl->error) {
             throw new MainLogin($tempCurl->errorCode, $tempCurl->errorMessage);
         }
 
-        if(($response = $tempCurl->response) != null) {
-            if(($shards = json_decode(json_encode($tempCurl->response), true)) != null) {
-                foreach($shards[ 'shardInfo' ] as $shard) {
-                    foreach($shard[ 'platforms' ] as $platform) {
-                        if($platform === API::getPlatform($this->user->getPlatform())) {
+        if (($response = $tempCurl->response) != null) {
+            if (($shards = json_decode(json_encode($tempCurl->response), true)) != null) {
+                foreach ($shards['shardInfo'] as $shard) {
+                    foreach ($shard['platforms'] as $platform) {
+                        if ($platform === API::getPlatform($this->user->getPlatform())) {
                             $this->shardInfos = $shard;
                         }
                     }
@@ -190,30 +197,32 @@ class Login {
      * @param null $shards
      *
      * @throws MainLogin
+     *
      * @return bool
      */
-    private function getAccountInformation($shards = null) {
-        if($shards == null) {
+    private function getAccountInformation($shards = null)
+    {
+        if ($shards == null) {
             $shards = $this->shardInfos;
         }
 
         $tempCurl = &$this->curl;
-        $tempCurl->setHeader('X-UT-Route', 'https://' . $shards[ 'clientFacingIpPort' ]);
+        $tempCurl->setHeader('X-UT-Route', 'https://'.$shards['clientFacingIpPort']);
         $tempCurl->get(URL::LOGIN_ACCOUNTS);
 
-        if($tempCurl->error) {
+        if ($tempCurl->error) {
             throw new MainLogin($tempCurl->errorCode, $tempCurl->errorMessage);
         }
 
         $accounts = json_decode(json_encode($tempCurl->response), true);
-        if(count($accounts) > 0 && count($accounts[ 'userAccountInfo' ]) > 0 && count(
-                                                                                    $accounts[ 'userAccountInfo' ][ 'personas' ]
+        if (count($accounts) > 0 && count($accounts['userAccountInfo']) > 0 && count(
+                                                                                    $accounts['userAccountInfo']['personas']
                                                                                 ) > 0
         ) {
             $p = null;
-            foreach($accounts[ 'userAccountInfo' ][ 'personas' ] as $persona) {
-                foreach($persona[ 'userClubList' ] as $club) {
-                    if($club[ 'year' ] == Configuration::FUT_YEAR && $club[ 'platform' ] == API::getPlatform(
+            foreach ($accounts['userAccountInfo']['personas'] as $persona) {
+                foreach ($persona['userClubList'] as $club) {
+                    if ($club['year'] == Configuration::FUT_YEAR && $club['platform'] == API::getPlatform(
                             $this->user->getPlatform()
                         )
                     ) {
@@ -221,7 +230,7 @@ class Login {
                     }
                 }
             }
-            if($p != null) {
+            if ($p != null) {
                 $this->persona = $p;
 
                 return $this->getSession();
@@ -233,10 +242,11 @@ class Login {
         }
     }
 
-    private function getSession() {
+    private function getSession()
+    {
         $data = [
-            'nucleusPersonaId'          => $this->persona[ 'personaId' ],
-            'nucleusPersonaDisplayName' => $this->persona[ 'personaName' ],
+            'nucleusPersonaId'          => $this->persona['personaId'],
+            'nucleusPersonaDisplayName' => $this->persona['personaName'],
             'gameSku'                   => API::getGameSku($this->user->getPlatform()),
             'nucleusPersonaPlatform'    => API::getPlatform($this->user->getPlatform()),
         ];
@@ -247,38 +257,39 @@ class Login {
         $curl->setHeader('Content-Type', 'application/json');
         $curl->post(URL::LOGIN_SESSION, $data);
 
-        if($curl->error) {
+        if ($curl->error) {
             throw new MainLogin($curl->errorCode, $curl->errorMessage);
         }
 
-        $data          = json_decode(json_encode($curl->response), true);
+        $data = json_decode(json_encode($curl->response), true);
         $this->session = $data;
 
         return $this->phishing();
     }
 
-    private function phishing() {
+    private function phishing()
+    {
         $curl = &$this->curl;
-        $curl->setHeader('X-UT-SID', $this->session[ 'sid' ]);
+        $curl->setHeader('X-UT-SID', $this->session['sid']);
 
         $curl->get(URL::LOGIN_QUESTION);
 
-        if($curl->error) {
+        if ($curl->error) {
             throw new MainLogin($curl->errorCode, $curl->errorMessage);
         }
 
         // Check for other responses
         $question = json_decode(json_encode($curl->response), true);
 
-        if(isset($question[ 'code' ])) {
-            if($question[ 'code' ] === Comparisons::CAPTCHA_BODY_CODE) {
+        if (isset($question['code'])) {
+            if ($question['code'] === Comparisons::CAPTCHA_BODY_CODE) {
                 throw new CaptchaException();
             }
         }
 
-        if(isset($question[ 'string' ])) {
-            if($question[ 'string' ] === Comparisons::ALREADY_LOGGED_IN) {
-                $this->setForFutureRequests($question[ 'token' ]);
+        if (isset($question['string'])) {
+            if ($question['string'] === Comparisons::ALREADY_LOGGED_IN) {
+                $this->setForFutureRequests($question['token']);
 
                 return true;
             }
@@ -287,32 +298,34 @@ class Login {
         return $this->validate();
     }
 
-    private function setForFutureRequests($token) {
+    private function setForFutureRequests($token)
+    {
         $headers = [
             'X-UT-PHISHING-TOKEN'           => $token,
             'X-HTTP-Method-Override'        => 'GET',
-            Configuration::X_UT_ROUTE_PARAM => 'https://' . explode(':', $this->session[ 'ipPort' ])[ 0 ],
+            Configuration::X_UT_ROUTE_PARAM => 'https://'.explode(':', $this->session['ipPort'])[0],
             'x-flash-version'               => '20,0,0,272',
         ];
         $this->user->setHeaders($headers);
     }
 
-    public function validate() {
+    public function validate()
+    {
         $secret = EAHashor::getHash($this->user->getSecret());
 
         $this->curl->setHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $this->curl->setHeader('X-UT-SID', $this->session[ 'sid' ]);
+        $this->curl->setHeader('X-UT-SID', $this->session['sid']);
 
-        $this->curl->post(URL::LOGIN_VALIDATE, [ 'answer' => $secret ]);
+        $this->curl->post(URL::LOGIN_VALIDATE, ['answer' => $secret]);
 
-        if($this->curl->error) {
+        if ($this->curl->error) {
             throw new MainLogin($this->curl->errorCode, $this->curl->errorMessage);
         }
 
         $debug = json_decode($this->curl->response, true);
-        if(isset($debug[ 'debug' ])) {
-            if($debug[ 'debug' ] === Comparisons::CORRECT_ANSWER) {
-                $this->setForFutureRequests($debug[ 'token' ]);
+        if (isset($debug['debug'])) {
+            if ($debug['debug'] === Comparisons::CORRECT_ANSWER) {
+                $this->setForFutureRequests($debug['token']);
 
                 return true;
             }
@@ -320,7 +333,8 @@ class Login {
         throw new MainLogin(2856162, 'Could not login with secret');
     }
 
-    private function postLoginForm($url) {
+    private function postLoginForm($url)
+    {
         $this->curl->post(
             $url,
             array_merge(
@@ -332,25 +346,26 @@ class Login {
             )
         );
 
-        if($this->curl->error) {
+        if ($this->curl->error) {
             throw new MainLogin($this->curl->errorCode, $this->curl->errorMessage);
         }
 
         $document = Parser::getHTML($this->curl->response);
-        $title    = Parser::getDocumentTitle($document);
+        $title = Parser::getDocumentTitle($document);
 
-        if($title === Comparisons::LOGIN_FORM_TITLE) {
+        if ($title === Comparisons::LOGIN_FORM_TITLE) {
             return $this->curl->getInfo(CURLINFO_EFFECTIVE_URL);
-        } elseif($title === Comparisons::MAIN_LOGIN_TITLE) {
+        } elseif ($title === Comparisons::MAIN_LOGIN_TITLE) {
             throw new MainLogin(295712, 'Login failed');
         } else {
-            throw new MainLogin(281658, 'Page not matching login form page (' . $title . ')');
+            throw new MainLogin(281658, 'Page not matching login form page ('.$title.')');
         }
     }
 
-    private function postTwoFactorForm($url) {
+    private function postTwoFactorForm($url)
+    {
         $token = $this->user->getToken();
-        if($token != null) {
+        if ($token != null) {
             $this->curl->post(
                 $url,
                 array_merge(
@@ -361,23 +376,23 @@ class Login {
                 )
             );
 
-            if($this->curl->error) {
+            if ($this->curl->error) {
                 throw new MainLogin($this->curl->errorCode, $this->curl->errorMessage);
             }
 
             $document = Parser::getHTML($this->curl->response);
-            $title    = Parser::getDocumentTitle($document);
+            $title = Parser::getDocumentTitle($document);
 
-            if($title === Comparisons::LOGGED_IN_TITLE) {
+            if ($title === Comparisons::LOGGED_IN_TITLE) {
                 return $this->getFUTPage();
-            } elseif($title === Comparisons::MAIN_LOGIN_TITLE) {
+            } elseif ($title === Comparisons::MAIN_LOGIN_TITLE) {
                 throw new MainLogin(285719, 'Could not login');
-            } elseif($title === Comparisons::LOGIN_FORM_TITLE) {
+            } elseif ($title === Comparisons::LOGIN_FORM_TITLE) {
                 throw new MainLogin(295712, 'Incorrect verification code');
-            } elseif($title === Comparisons::NO_AUTHENTICATOR_FORM_TITLE) {
+            } elseif ($title === Comparisons::NO_AUTHENTICATOR_FORM_TITLE) {
                 throw new MainLogin(224107, 'No authenticator set up');
             } else {
-                throw new MainLogin(281752, 'Unknown error/page occurred (' . $title . ')');
+                throw new MainLogin(281752, 'Unknown error/page occurred ('.$title.')');
             }
         } else {
             throw new NulledTokenFunction();
@@ -387,7 +402,8 @@ class Login {
     /**
      * @return Curl
      */
-    public function getCurl() {
+    public function getCurl()
+    {
         return $this->curl;
     }
 }

@@ -2,10 +2,9 @@
 /**
  * @author JKetelaar
  */
+require_once '../vendor/autoload.php';
 
-require_once('../vendor/autoload.php');
-
-define('DATA_DIR', (($dir = drush_server_home()) === null ? __DIR__ : $dir) . '/.fut-bot/data/');
+define('DATA_DIR', (($dir = drush_server_home()) === null ? __DIR__ : $dir).'/.fut-bot/data/');
 
 $creds = [
     'username' => 'my@email.com',
@@ -16,10 +15,11 @@ $creds = [
 ];
 
 $api = new \JKetelaar\fut\api\API(
-    $creds[ 'username' ], $creds[ 'password' ], $creds[ 'secret' ], $creds[ 'key' ], $creds[ 'platform' ]
+    $creds['username'], $creds['password'], $creds['secret'], $creds['key'], $creds['platform']
 );
 
-function key_generator_function_name() {
+function key_generator_function_name()
+{
     $totp = new \OTPHP\TOTP('FIFA', 'KXVY7VWMX2IMLDIM');
 
     return $totp->now();
@@ -28,12 +28,13 @@ function key_generator_function_name() {
 /**
  * @return null|string
  */
-function drush_server_home() {
+function drush_server_home()
+{
     $home = getenv('HOME');
-    if( !empty($home)) {
+    if (!empty($home)) {
         $home = rtrim($home, '/');
-    } elseif( !empty($_SERVER[ 'HOMEDRIVE' ]) && !empty($_SERVER[ 'HOMEPATH' ])) {
-        $home = $_SERVER[ 'HOMEDRIVE' ] . $_SERVER[ 'HOMEPATH' ];
+    } elseif (!empty($_SERVER['HOMEDRIVE']) && !empty($_SERVER['HOMEPATH'])) {
+        $home = $_SERVER['HOMEDRIVE'].$_SERVER['HOMEPATH'];
         $home = rtrim($home, '\\/');
     }
 
