@@ -6,5 +6,5 @@
 require_once('bootstrap.php');
 
 if($api->login() === true) {
-    echo('We\'re logged in!');
+    echo 'We\'re logged in!';
 }
